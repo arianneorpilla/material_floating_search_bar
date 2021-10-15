@@ -404,8 +404,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   }
 }
 
-class FloatingSearchBarState
-    extends ImplicitlyAnimatedWidgetState<FloatingSearchBarStyle, FloatingSearchBar> {
+class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
+    FloatingSearchBarStyle, FloatingSearchBar> {
   final GlobalKey<FloatingSearchAppBarState> barKey = GlobalKey();
   FloatingSearchAppBarState? get barState => barKey.currentState;
 
@@ -418,7 +418,8 @@ class FloatingSearchBarState
       }
     });
 
-  late CurvedAnimation animation = CurvedAnimation(parent: _controller, curve: curve);
+  late CurvedAnimation animation =
+      CurvedAnimation(parent: _controller, curve: curve);
 
   late final _translateController = AnimationController(
     vsync: this,
@@ -508,7 +509,8 @@ class FloatingSearchBarState
       transition.searchBar = this;
     }
 
-    if (widget.scrollController != null && widget.scrollController != _scrollController) {
+    if (widget.scrollController != null &&
+        widget.scrollController != _scrollController) {
       _scrollController = widget.scrollController!;
     }
 
@@ -572,7 +574,8 @@ class FloatingSearchBarState
 
         final delta = pixel - _lastPixel;
 
-        _translateController.value += delta / (style.height + style.margins.top);
+        _translateController.value +=
+            delta / (style.height + style.margins.top);
         _lastPixel = pixel;
       }
     }
@@ -670,7 +673,8 @@ class FloatingSearchBarState
     return AnimatedAlign(
       duration: isAnimating ? duration : Duration.zero,
       curve: widget.transitionCurve,
-      alignment: Alignment(isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
+      alignment: Alignment(
+          isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
       child: transition.isBodyInsideSearchBar
           ? bar
           : Column(
@@ -707,7 +711,8 @@ class FloatingSearchBarState
       onQueryChanged: widget.onQueryChanged,
       onSubmitted: widget.onSubmitted,
       progress: widget.progress,
-      automaticallyImplyDrawerHamburger: widget.automaticallyImplyDrawerHamburger,
+      automaticallyImplyDrawerHamburger:
+          widget.automaticallyImplyDrawerHamburger,
       automaticallyImplyBackButton: widget.automaticallyImplyBackButton,
       toolbarOptions: widget.toolbarOptions,
       transitionDuration: widget.transitionDuration,
@@ -830,20 +835,23 @@ class FloatingSearchBarState
       maxWidth: widget.width,
       openMaxWidth: widget.openWidth,
       axisAlignment: widget.axisAlignment ?? 0.0,
-      openAxisAlignment: widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
+      openAxisAlignment:
+          widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
       backgroundColor: widget.backgroundColor ?? theme.cardColor,
       shadowColor: widget.shadowColor ?? Colors.black45,
-      backdropColor:
-          widget.backdropColor ?? widget.transition?.backdropColor ?? Colors.black26,
+      backdropColor: widget.backdropColor ??
+          widget.transition?.backdropColor ??
+          Colors.black26,
       border: widget.border ?? BorderSide.none,
       borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       margins: (widget.margins ??
-              EdgeInsets.fromLTRB(8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
+              EdgeInsets.fromLTRB(
+                  8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
           .resolve(direction),
       padding: widget.padding?.resolve(direction) ??
           const EdgeInsets.symmetric(horizontal: 12),
-      insets:
-          widget.insets?.resolve(direction) ?? const EdgeInsets.symmetric(horizontal: 8),
+      insets: widget.insets?.resolve(direction) ??
+          const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 

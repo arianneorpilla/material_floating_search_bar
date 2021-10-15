@@ -141,7 +141,8 @@ class ExpandingFloatingSearchBarTransition extends FloatingSearchBarTransition {
   }
 
   @override
-  EdgeInsetsGeometry lerpMargin() => EdgeInsetsGeometry.lerp(margin, EdgeInsets.zero, t)!;
+  EdgeInsetsGeometry lerpMargin() =>
+      EdgeInsetsGeometry.lerp(margin, EdgeInsets.zero, t)!;
 
   @override
   BorderRadius lerpBorderRadius() =>
@@ -171,7 +172,8 @@ class ExpandingFloatingSearchBarTransition extends FloatingSearchBarTransition {
 /// The base class for all overlaying [FloatingSearchBarTransition]s, which are
 /// those, where the body of the [FloatingSearchBar] is displayed outside of the
 /// bar.
-abstract class OverlayingFloatingSearchBarTransition extends FloatingSearchBarTransition {
+abstract class OverlayingFloatingSearchBarTransition
+    extends FloatingSearchBarTransition {
   /// The vertical spacing between the bar of the [FloatingSearchBar] and its body.
   final double? _spacing;
 
@@ -265,7 +267,8 @@ abstract class OverlayingFloatingSearchBarTransition extends FloatingSearchBarTr
 ///
 /// An example of this can be viewed [here](https://github.com/bxqm/material_floating_search_bar/blob/master/assets/circular_example.gif):
 /// {@endtemplate}
-class CircularFloatingSearchBarTransition extends OverlayingFloatingSearchBarTransition {
+class CircularFloatingSearchBarTransition
+    extends OverlayingFloatingSearchBarTransition {
   /// Creates a [FloatingSearchBarTransition],
   /// {@macro circular_floating_search_bar_transition}
   CircularFloatingSearchBarTransition({
@@ -299,7 +302,8 @@ class CircularFloatingSearchBarTransition extends OverlayingFloatingSearchBarTra
 ///
 /// An example of this can be viewed [here](https://github.com/bxqm/material_floating_search_bar/blob/master/assets/slide_fade_example.gif)
 /// {@endtemplate}
-class SlideFadeFloatingSearchBarTransition extends OverlayingFloatingSearchBarTransition {
+class SlideFadeFloatingSearchBarTransition
+    extends OverlayingFloatingSearchBarTransition {
   final double translation;
 
   /// Creates a [FloatingSearchBarTransition],
