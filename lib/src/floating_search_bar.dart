@@ -318,7 +318,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   final Duration? showAfter;
 
   // * --- Scrolling --- *
-  /// Whether the body of this `FloatingSearchBar` is using its
+  /// Whether the builder of this `FloatingSearchBar` is using its
   /// own [Scrollable].
   ///
   /// This will allow the body of the `FloatingSearchBar` to have an
@@ -782,7 +782,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
     );
 
     return IgnorePointer(
-      ignoring: widget.isScrollControlled && v < 1.0,
+      ignoring: v < 1.0,
       child: SizedBox(
         width: (transition.isBodyInsideSearchBar
                 ? transition.lerpInnerWidth()

@@ -21,7 +21,7 @@ Click [here](https://github.com/bxqm/material_floating_search_bar/blob/master/ex
 Add it to your `pubspec.yaml` file:
 ```yaml
 dependencies:
-  material_floating_search_bar: ^0.3.5
+  material_floating_search_bar: ^0.3.6
 ```
 Install packages from the command line
 ```
