@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -119,7 +121,6 @@ class _HomeState extends State<Home> {
         onQueryChanged: model.onQueryChanged,
         scrollPadding: EdgeInsets.zero,
         transition: CircularFloatingSearchBarTransition(spacing: 16),
-        isScrollControlled: true,
         builder: (context, _) => buildExpandableBody(model),
         body: buildBody(),
       ),
@@ -145,19 +146,32 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildExpandableBody(SearchModel model) {
-    return ListView.builder(
-      itemCount: 200,
-      itemBuilder: (context, index) {
-        print('build $index');
-
-        return Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Text(
-            '$index',
-          ),
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: ImplicitlyAnimatedList<Place>(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          items: model.suggestions,
+          insertDuration: const Duration(milliseconds: 700),
+          itemBuilder: (context, animation, item, i) {
+            return SizeFadeTransition(
+              animation: animation,
+              child: buildItem(context, item),
+            );
+          },
+          updateItemBuilder: (context, animation, item) {
+            return FadeTransition(
+              opacity: animation,
+              child: buildItem(context, item),
+            );
+          },
+          areItemsTheSame: (a, b) => a == b,
+        ),
+      ),
     );
   }
 
