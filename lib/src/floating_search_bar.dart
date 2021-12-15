@@ -684,7 +684,7 @@ class FloatingSearchBarState
       child: container,
     );
 
-    return AnimatedAlign(
+    final searchBar = AnimatedAlign(
       duration: isAnimating ? duration : Duration.zero,
       curve: widget.transitionCurve,
       alignment: Alignment(isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
@@ -697,6 +697,8 @@ class FloatingSearchBarState
               ],
             ),
     );
+
+    return widget.barBuilder?.call(context, searchBar) ?? searchBar;
   }
 
   Widget _buildInnerBar() {
@@ -793,7 +795,7 @@ class FloatingSearchBarState
             ),
     );
 
-    final bar = IgnorePointer(
+    return IgnorePointer(
       ignoring: v < 1.0,
       child: SizedBox(
         width: (transition.isBodyInsideSearchBar
@@ -803,8 +805,6 @@ class FloatingSearchBarState
         child: body,
       ),
     );
-
-    return widget.barBuilder?.call(context, bar) ?? bar;
   }
 
   Widget _buildBackdrop() {
