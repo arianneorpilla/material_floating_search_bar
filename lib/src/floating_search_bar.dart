@@ -684,12 +684,14 @@ class FloatingSearchBarState
       child: container,
     );
 
-    final searchBar = AnimatedAlign(
+    final searchBar = widget.barBuilder?.call(context, bar) ?? bar;
+
+    return AnimatedAlign(
       duration: isAnimating ? duration : Duration.zero,
       curve: widget.transitionCurve,
       alignment: Alignment(isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
       child: transition.isBodyInsideSearchBar
-          ? bar
+          ? searchBar
           : Column(
               children: <Widget>[
                 bar,
@@ -697,8 +699,6 @@ class FloatingSearchBarState
               ],
             ),
     );
-
-    return widget.barBuilder?.call(context, searchBar) ?? searchBar;
   }
 
   Widget _buildInnerBar() {
