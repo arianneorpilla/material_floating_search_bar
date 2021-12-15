@@ -273,6 +273,16 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   ///    child.
   final FloatingSearchBarTransition? transition;
 
+  /// The builder for the search bar.
+  /// 
+  /// Useful for wrapping the search bar in a PointerInterceptor on web.
+  final Widget Function(BuildContext context, Widget child)? barBuilder;
+  
+  /// The builder for the backdrop.
+  /// 
+  /// Useful for wrapping the backdrop in a PointerInterceptor on web.
+  final Widget Function(BuildContext context, Widget child)? backdropBuilder;
+
   /// The builder for the body of this `FloatingSearchBar`.
   ///
   /// Usually, a list of items. Note that unless [isScrollControlled]
@@ -382,6 +392,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.onSubmitted,
     this.onFocusChanged,
     this.transition,
+    this.barBuilder,
+    this.backdropBuilder,
     required this.builder,
     this.controller,
     this.textInputAction = TextInputAction.search,
@@ -781,7 +793,7 @@ class FloatingSearchBarState
             ),
     );
 
-    return IgnorePointer(
+    final bar = IgnorePointer(
       ignoring: v < 1.0,
       child: SizedBox(
         width: (transition.isBodyInsideSearchBar
@@ -791,12 +803,14 @@ class FloatingSearchBarState
         child: body,
       ),
     );
+
+    return widget.barBuilder?.call(context, bar) ?? bar;
   }
 
   Widget _buildBackdrop() {
     if (v == 0.0) return const SizedBox(height: 0);
 
-    return FadeTransition(
+    final backdrop = FadeTransition(
       opacity: animation,
       child: GestureDetector(
         onTap: () {
@@ -811,6 +825,8 @@ class FloatingSearchBarState
         ),
       ),
     );
+
+    return widget.backdropBuilder?.call(context, backdrop) ?? backdrop;
   }
 
   @override
