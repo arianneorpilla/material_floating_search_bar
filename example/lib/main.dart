@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -186,7 +186,7 @@ class _HomeState extends State<Home> {
       children: [
         InkWell(
           onTap: () {
-            FloatingSearchBar.of(context).close();
+            FloatingSearchBar.of(context)?.close();
             Future.delayed(
               const Duration(milliseconds: 500),
               () => model.clear(),
@@ -218,7 +218,7 @@ class _HomeState extends State<Home> {
                       const SizedBox(height: 2),
                       Text(
                         place.level2Address,
-                        style: textTheme.bodyText2.copyWith(color: Colors.grey.shade600),
+                        style: textTheme.bodyText2?.copyWith(color: Colors.grey.shade600),
                       ),
                     ],
                   ),
@@ -278,7 +278,7 @@ class _HomeState extends State<Home> {
 }
 
 class Map extends StatelessWidget {
-  const Map({Key key}) : super(key: key);
+  const Map({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -299,14 +299,24 @@ class Map extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Colors.white,
-              child: const Icon(Icons.gps_fixed, color: Color(0xFF4d4d4d)),
+            Builder(
+              builder: (context) => FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchBar(),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.gps_fixed, color: Color(0xFF4d4d4d)),
+              ),
             ),
             const SizedBox(height: 16),
             FloatingActionButton(
               onPressed: () {},
+              heroTag: "öslkföl",
               backgroundColor: Colors.blue,
               child: const Icon(Icons.directions),
             ),
@@ -324,8 +334,43 @@ class Map extends StatelessWidget {
   }
 }
 
+class SearchBar extends StatefulWidget {
+  const SearchBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _SearchBarState createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final FloatingSearchBarController controller = FloatingSearchBarController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FloatingSearchBar(
+        controller: controller,
+        title: Text(
+          "Aschaffenburg",
+        ),
+        hint: 'Suche einen Ort',
+        builder: (context, _) {
+          return Container();
+        },
+      ),
+    );
+  }
+}
+
 class SomeScrollableContent extends StatelessWidget {
-  const SomeScrollableContent({Key key}) : super(key: key);
+  const SomeScrollableContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +390,7 @@ class SomeScrollableContent extends StatelessWidget {
 }
 
 class FloatingSearchAppBarExample extends StatelessWidget {
-  const FloatingSearchAppBarExample({Key key}) : super(key: key);
+  const FloatingSearchAppBarExample({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -600,6 +600,7 @@ class FloatingSearchBarState
             builder: (context, __, _) => AnimatedBuilder(
               animation: animation,
               builder: (context, _) => Stack(
+                clipBehavior: Clip.none,
                 children: <Widget>[
                   _buildBackdrop(),
                   _buildSearchBar(),
@@ -618,6 +619,7 @@ class FloatingSearchBarState
       );
 
       return Stack(
+        clipBehavior: Clip.none,
         fit: StackFit.expand,
         children: [
           body,
@@ -730,6 +732,7 @@ class FloatingSearchBarState
 
     return SizedBox.expand(
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: <Widget>[
           if (transition.isBodyInsideSearchBar && v > 0.0)
@@ -750,6 +753,7 @@ class FloatingSearchBarState
               color: transition.lerpBackgroundColor(),
               alignment: Alignment.topCenter,
               child: Stack(
+                clipBehavior: Clip.none,
                 alignment: Alignment.center,
                 children: [
                   SizedBox(

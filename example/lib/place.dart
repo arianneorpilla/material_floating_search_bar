@@ -1,18 +1,15 @@
-import 'package:flutter/material.dart';
-
 class Place {
   final String name;
   final String state;
   final String country;
   const Place({
-    @required this.name,
-    this.state,
-    @required this.country,
-  })  : assert(name != null),
-        assert(country != null);
+    required this.name,
+    this.state = '',
+    required this.country,
+  });
 
-  bool get hasState => state?.isNotEmpty == true;
-  bool get hasCountry => country?.isNotEmpty == true;
+  bool get hasState => state.isNotEmpty == true;
+  bool get hasCountry => country.isNotEmpty == true;
 
   bool get isCountry => hasCountry && name == country;
   bool get isState => hasState && name == state;
