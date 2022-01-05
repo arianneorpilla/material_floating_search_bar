@@ -577,6 +577,12 @@ class FloatingSearchBarState
 
         final delta = pixel - _lastPixel;
 
+        // ScrollView jumped, do nothing in this case.
+        if (delta.abs() > 100) {
+          _lastPixel = pixel;
+          return false;
+        }
+
         _translateController.value += delta / (style.height + style.margins.top);
         _lastPixel = pixel;
       }
