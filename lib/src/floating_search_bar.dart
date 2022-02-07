@@ -340,6 +340,9 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// To show the cursor in the textfield or not
   final bool showCursor;
 
+  /// Allow processing any keypress into the text box
+  final ValueChanged<KeyEvent>? onKeyEvent;
+
   /// The [EdgeInsets] of the [SingleChildScrollView] holding the expandable body of
   /// this `FloatingSearchBar`.
   final EdgeInsets scrollPadding;
@@ -395,6 +398,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
     this.showCursor = true,
     bool initiallyHidden = false,
+    this.onKeyEvent,
   })  : showAfter = showAfter ?? (initiallyHidden ? const Duration(days: 1) : null),
         super(key, implicitDuration, implicitCurve);
 
@@ -734,6 +738,7 @@ class FloatingSearchBarState
       padding: style.padding,
       titleStyle: widget.queryStyle,
       shadowColor: style.shadowColor,
+      onKeyEvent: widget.onKeyEvent,
     );
 
     return SizedBox.expand(
