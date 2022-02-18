@@ -491,27 +491,31 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         ),
       ),
     );
+    return (Platform.isIOS || Platform.isMacOS)
+        ? _getBarWidget(bar)
+        : WillPopScope(
+            onWillPop: () async {
+              if (isOpen && !widget.alwaysOpened) {
+                isOpen = false;
+                return false;
+              }
+              return true;
+            },
+            child: _getBarWidget(bar),
+          );
+  }
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (isOpen && !widget.alwaysOpened) {
-          isOpen = false;
-          return false;
-        }
-
-        return true;
-      },
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
-        children: [
-          bar,
-          _FloatingSearchProgressBar(
-            progress: widget.progress,
-            color: style.accentColor,
-          ),
-        ],
-      ),
+  Stack _getBarWidget(GestureDetector bar) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.bottomCenter,
+      children: [
+        bar,
+        _FloatingSearchProgressBar(
+          progress: widget.progress,
+          color: style.accentColor,
+        ),
+      ],
     );
   }
 

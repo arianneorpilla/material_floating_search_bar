@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -7,9 +8,7 @@ import 'package:flutter/services.dart';
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import 'floating_search_bar_actions.dart';
 import 'floating_search_bar_dismissable.dart';
-import 'floating_search_bar_transition.dart';
 import 'search_bar_style.dart';
 import 'text_controller.dart';
 import 'util/util.dart';
@@ -601,24 +600,11 @@ class FloatingSearchBarState
     body = widget.builder(context, animation);
 
     final searchBar = SizedBox.expand(
-      child: WillPopScope(
+      child: (Platform.isIOS | Platform.isMacOS)
+          ? _getSearchBarWidget()
+          : WillPopScope(
         onWillPop: _onPop,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: _onBuilderScroll,
-          child: ValueListenableBuilder(
-            valueListenable: rebuilder,
-            builder: (context, __, _) => AnimatedBuilder(
-              animation: animation,
-              builder: (context, _) => Stack(
-                clipBehavior: Clip.none,
-                children: <Widget>[
-                  _buildBackdrop(),
-                  _buildSearchBar(),
-                ],
-              ),
-            ),
-          ),
-        ),
+              child: _getSearchBarWidget(),
       ),
     );
 
@@ -641,6 +627,25 @@ class FloatingSearchBarState
     } else {
       return searchBar;
     }
+  }
+
+  NotificationListener<ScrollNotification> _getSearchBarWidget() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: _onBuilderScroll,
+      child: ValueListenableBuilder(
+        valueListenable: rebuilder,
+        builder: (context, __, _) => AnimatedBuilder(
+          animation: animation,
+          builder: (context, _) => Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              _buildBackdrop(),
+              _buildSearchBar(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildSearchBar() {
