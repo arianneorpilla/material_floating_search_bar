@@ -139,6 +139,8 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
 
   /// {@macro floating_search_bar.toolbarOptions}
   final ToolbarOptions? toolbarOptions;
+
+  final ValueChanged<KeyEvent>? onKeyEvent;
   const FloatingSearchAppBar({
     Key? key,
     Duration implicitDuration = const Duration(milliseconds: 500),
@@ -180,6 +182,7 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
     this.textInputType = TextInputType.text,
     this.autocorrect = true,
     this.toolbarOptions,
+    this.onKeyEvent,
   })  : assert(progress == null || (progress is num || progress is bool)),
         super(key, implicitDuration, implicitCurve);
 
@@ -574,33 +577,37 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
 
     Widget input;
     if (showTextInput) {
-      input = IntrinsicWidth(
-        child: TextField(
-          controller: _input,
-          showCursor: widget.showCursor,
-          scrollPadding: EdgeInsets.zero,
-          scrollPhysics: const NeverScrollableScrollPhysics(),
-          focusNode: _input.node,
-          maxLines: 1,
-          autofocus: false,
-          autocorrect: widget.autocorrect,
-          toolbarOptions: widget.toolbarOptions,
-          cursorColor: style.accentColor,
-          style: style.queryStyle,
-          textInputAction: widget.textInputAction,
-          keyboardType: widget.textInputType,
-          onSubmitted: widget.onSubmitted,
-          decoration: InputDecoration(
-            isDense: true,
-            hintText: widget.hint,
-            hintStyle: style.hintStyle,
-            contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            focusedErrorBorder: InputBorder.none,
+      input = KeyboardListener(
+        focusNode: _input.node,
+        onKeyEvent: widget.onKeyEvent,
+        child: IntrinsicWidth(
+          child: TextField(
+            controller: _input,
+            showCursor: widget.showCursor,
+            scrollPadding: EdgeInsets.zero,
+            scrollPhysics: const NeverScrollableScrollPhysics(),
+            //focusNode: _input.node,
+            maxLines: 1,
+            autofocus: false,
+            autocorrect: widget.autocorrect,
+            toolbarOptions: widget.toolbarOptions,
+            cursorColor: style.accentColor,
+            style: style.queryStyle,
+            textInputAction: widget.textInputAction,
+            keyboardType: widget.textInputType,
+            onSubmitted: widget.onSubmitted,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: widget.hint,
+              hintStyle: style.hintStyle,
+              contentPadding: EdgeInsets.zero,
+              border: InputBorder.none,
+              errorBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              focusedErrorBorder: InputBorder.none,
+            ),
           ),
         ),
       );

@@ -119,6 +119,12 @@ class _HomeState extends State<Home> {
         progress: model.isLoading,
         debounceDelay: const Duration(milliseconds: 500),
         onQueryChanged: model.onQueryChanged,
+        onKeyEvent: (KeyEvent keyEvent) {
+          if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
+            controller.query = "";
+            controller.close();
+          }
+        },
         scrollPadding: EdgeInsets.zero,
         transition: CircularFloatingSearchBarTransition(spacing: 16),
         builder: (context, _) => buildExpandableBody(model),
