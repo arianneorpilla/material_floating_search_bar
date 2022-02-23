@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -7,9 +8,7 @@ import 'package:flutter/services.dart';
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import 'floating_search_bar_actions.dart';
 import 'floating_search_bar_dismissable.dart';
-import 'floating_search_bar_transition.dart';
 import 'search_bar_style.dart';
 import 'text_controller.dart';
 import 'util/util.dart';
@@ -350,6 +349,9 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// To show the cursor in the textfield or not
   final bool showCursor;
 
+  /// Allow processing any keypress into the text box
+  final ValueChanged<KeyEvent>? onKeyEvent;
+
   /// The [EdgeInsets] of the [SingleChildScrollView] holding the expandable body of
   /// this `FloatingSearchBar`.
   final EdgeInsets scrollPadding;
@@ -407,6 +409,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
     this.showCursor = true,
     bool initiallyHidden = false,
+    this.onKeyEvent,
   })  : showAfter = showAfter ?? (initiallyHidden ? const Duration(days: 1) : null),
         super(key, implicitDuration, implicitCurve);
 
@@ -589,6 +592,12 @@ class FloatingSearchBarState
 
         final delta = pixel - _lastPixel;
 
+        // ScrollView jumped, do nothing in this case.
+        if (delta.abs() > 100) {
+          _lastPixel = pixel;
+          return false;
+        }
+
         _translateController.value += delta / (style.height + style.margins.top);
         _lastPixel = pixel;
       }
@@ -603,23 +612,11 @@ class FloatingSearchBarState
     body = widget.builder(context, animation);
 
     final searchBar = SizedBox.expand(
-      child: WillPopScope(
+      child: (Platform.isIOS | Platform.isMacOS)
+          ? _getSearchBarWidget()
+          : WillPopScope(
         onWillPop: _onPop,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: _onBuilderScroll,
-          child: ValueListenableBuilder(
-            valueListenable: rebuilder,
-            builder: (context, __, _) => AnimatedBuilder(
-              animation: animation,
-              builder: (context, _) => Stack(
-                children: <Widget>[
-                  _buildBackdrop(),
-                  _buildSearchBar(),
-                ],
-              ),
-            ),
-          ),
-        ),
+              child: _getSearchBarWidget(),
       ),
     );
 
@@ -630,6 +627,7 @@ class FloatingSearchBarState
       );
 
       return Stack(
+        clipBehavior: Clip.none,
         fit: StackFit.expand,
         children: [
           body,
@@ -641,6 +639,25 @@ class FloatingSearchBarState
     } else {
       return searchBar;
     }
+  }
+
+  NotificationListener<ScrollNotification> _getSearchBarWidget() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: _onBuilderScroll,
+      child: ValueListenableBuilder(
+        valueListenable: rebuilder,
+        builder: (context, __, _) => AnimatedBuilder(
+          animation: animation,
+          builder: (context, _) => Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              _buildBackdrop(),
+              _buildSearchBar(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildSearchBar() {
@@ -738,10 +755,12 @@ class FloatingSearchBarState
       padding: style.padding,
       titleStyle: widget.queryStyle,
       shadowColor: style.shadowColor,
+      onKeyEvent: widget.onKeyEvent,
     );
 
     final searchBar = SizedBox.expand(
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: <Widget>[
           if (transition.isBodyInsideSearchBar && v > 0.0)
@@ -762,6 +781,7 @@ class FloatingSearchBarState
               color: transition.lerpBackgroundColor(),
               alignment: Alignment.topCenter,
               child: Stack(
+                clipBehavior: Clip.none,
                 alignment: Alignment.center,
                 children: [
                   SizedBox(

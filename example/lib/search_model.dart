@@ -25,7 +25,8 @@ class SearchModel extends ChangeNotifier {
     if (query.isEmpty) {
       _suggestions = history;
     } else {
-      final response = await http.get('https://photon.komoot.io/api/?q=$query');
+      final response =
+          await http.get(Uri.parse('https://photon.komoot.io/api/?q=$query'));
       final body = json.decode(utf8.decode(response.bodyBytes));
       final features = body['features'] as List;
 

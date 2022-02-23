@@ -153,6 +153,7 @@ There are many customization options:
 | `builder`                   | The builder for the body of this `FloatingSearchBar`. <br><br> Usually, a list of items. Note that unless `isScrollControlled` is set to `true`, the body of a `FloatingSearchBar` must not have an unbounded height meaning that `shrinkWrap` should be set to `true` on all `Scrollables`.
 | `controller`                | The controller for this `FloatingSearchBar` which can be used to programatically open, close, show or hide the `FloatingSearchBar`.
 | `isScrollControlled` | Whether the body of this `FloatingSearchBar` is using its own `Scrollable`. <br><br> This will allow the body of the `FloatingSearchBar` to have an unbounded height. <br><br> Note that when set to `true`, the `FloatingSearchBar` won't be able to dismiss itself when tapped below the height of child inside the `Scrollable`, when the child is smaller than the avaialble height.
+| `initiallyHidden`                | Set to `true` to hide the search bar intially. You have to call `show` on the controller to in order to show the `FloatingSearchBar` again,
 
 ### Transitions
 
