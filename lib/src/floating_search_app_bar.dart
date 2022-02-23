@@ -491,7 +491,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         ),
       ),
     );
-    return (Platform.isIOS || Platform.isMacOS)
+    return (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
         ? _getBarWidget(bar)
         : WillPopScope(
             onWillPop: () async {
