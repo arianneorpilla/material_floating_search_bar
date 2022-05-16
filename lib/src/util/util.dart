@@ -18,7 +18,7 @@ double interval(double begin, double end, double t,
 }
 
 void postFrame(VoidCallback callback) {
-  WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
+  WidgetsBinding.instance.addPostFrameCallback((_) => callback());
 }
 
 bool get isAvailableSwipeBack {
