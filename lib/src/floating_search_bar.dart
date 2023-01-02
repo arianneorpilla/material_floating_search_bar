@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'
     hide ImplicitlyAnimatedWidget, ImplicitlyAnimatedWidgetState;
 import 'package:flutter/services.dart';
@@ -350,7 +348,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// To show the cursor in the textfield or not
   final bool showCursor;
 
-  /// Allow processing any keypress into the text box
+  /// Allow processing any keypress into the input text.
   final ValueChanged<KeyEvent>? onKeyEvent;
 
   /// The [EdgeInsets] of the [SingleChildScrollView] holding the expandable body of
@@ -411,7 +409,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.showCursor = true,
     bool initiallyHidden = false,
     this.onKeyEvent,
-  })  : showAfter = showAfter ?? (initiallyHidden ? const Duration(days: 1) : null),
+  })  : showAfter =
+            showAfter ?? (initiallyHidden ? const Duration(days: 1) : null),
         super(key, implicitDuration, implicitCurve);
 
   @override
@@ -422,8 +421,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   }
 }
 
-class FloatingSearchBarState
-    extends ImplicitlyAnimatedWidgetState<FloatingSearchBarStyle, FloatingSearchBar> {
+class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
+    FloatingSearchBarStyle, FloatingSearchBar> {
   final GlobalKey<FloatingSearchAppBarState> barKey = GlobalKey();
   FloatingSearchAppBarState? get barState => barKey.currentState;
 
@@ -436,7 +435,8 @@ class FloatingSearchBarState
       }
     });
 
-  late CurvedAnimation animation = CurvedAnimation(parent: _controller, curve: curve);
+  late CurvedAnimation animation =
+      CurvedAnimation(parent: _controller, curve: curve);
 
   late final _translateController = AnimationController(
     vsync: this,
@@ -482,9 +482,7 @@ class FloatingSearchBarState
     }
   }
 
-  void rebuild() {
-    rebuilder.value++;
-  }
+  void rebuild() => rebuilder.value++;
 
   double _offset = 0.0;
   double get offset => _offset;
@@ -529,7 +527,8 @@ class FloatingSearchBarState
       transition.searchBar = this;
     }
 
-    if (widget.scrollController != null && widget.scrollController != _scrollController) {
+    if (widget.scrollController != null &&
+        widget.scrollController != _scrollController) {
       _scrollController = widget.scrollController!;
     }
 
@@ -599,7 +598,8 @@ class FloatingSearchBarState
           return false;
         }
 
-        _translateController.value += delta / (style.height + style.margins.top);
+        _translateController.value +=
+            delta / (style.height + style.margins.top);
         _lastPixel = pixel;
       }
     }
@@ -613,12 +613,12 @@ class FloatingSearchBarState
     body = widget.builder(context, animation);
 
     final searchBar = SizedBox.expand(
-      child: (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+      child: isAvailableSwipeBack
           ? _getSearchBarWidget()
           : WillPopScope(
-        onWillPop: _onPop,
+              onWillPop: _onPop,
               child: _getSearchBarWidget(),
-      ),
+            ),
     );
 
     if (widget.body != null) {
@@ -671,10 +671,7 @@ class FloatingSearchBarState
       focused: isOpen,
       child: Padding(
         padding: transition.lerpMargin(),
-        child: Material(
-          elevation: transition.lerpElevation(),
-          shadowColor: style.shadowColor,
-          borderRadius: borderRadius,
+        child: AnimatedBuilder(
           child: Container(
             width: transition.lerpWidth(),
             height: transition.lerpHeight(),
@@ -689,6 +686,17 @@ class FloatingSearchBarState
               borderRadius: borderRadius,
               child: _buildInnerBar(),
             ),
+          ),
+          animation: CurvedAnimation(
+            parent: _translateAnimation,
+            curve: const Interval(0.95, 1.0),
+          ),
+          builder: (context, child) => Material(
+            elevation: transition.lerpElevation() *
+                (1.0 - interval(0.95, 1.0, _translateAnimation.value)),
+            shadowColor: style.shadowColor,
+            borderRadius: borderRadius,
+            child: child,
           ),
         ),
       ),
@@ -705,7 +713,8 @@ class FloatingSearchBarState
     return AnimatedAlign(
       duration: isAnimating ? duration : Duration.zero,
       curve: widget.transitionCurve,
-      alignment: Alignment(isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
+      alignment: Alignment(
+          isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
       child: transition.isBodyInsideSearchBar
           ? bar
           : Column(
@@ -742,7 +751,8 @@ class FloatingSearchBarState
       onQueryChanged: widget.onQueryChanged,
       onSubmitted: widget.onSubmitted,
       progress: widget.progress,
-      automaticallyImplyDrawerHamburger: widget.automaticallyImplyDrawerHamburger,
+      automaticallyImplyDrawerHamburger:
+          widget.automaticallyImplyDrawerHamburger,
       automaticallyImplyBackButton: widget.automaticallyImplyBackButton,
       toolbarOptions: widget.toolbarOptions,
       transitionDuration: widget.transitionDuration,
@@ -872,20 +882,23 @@ class FloatingSearchBarState
       maxWidth: widget.width,
       openMaxWidth: widget.openWidth,
       axisAlignment: widget.axisAlignment ?? 0.0,
-      openAxisAlignment: widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
+      openAxisAlignment:
+          widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
       backgroundColor: widget.backgroundColor ?? theme.cardColor,
       shadowColor: widget.shadowColor ?? Colors.black45,
-      backdropColor:
-          widget.backdropColor ?? widget.transition?.backdropColor ?? Colors.black26,
+      backdropColor: widget.backdropColor ??
+          widget.transition?.backdropColor ??
+          Colors.black26,
       border: widget.border ?? BorderSide.none,
       borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       margins: (widget.margins ??
-              EdgeInsets.fromLTRB(8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
+              EdgeInsets.fromLTRB(
+                  8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
           .resolve(direction),
       padding: widget.padding?.resolve(direction) ??
           const EdgeInsets.symmetric(horizontal: 12),
-      insets:
-          widget.insets?.resolve(direction) ?? const EdgeInsets.symmetric(horizontal: 8),
+      insets: widget.insets?.resolve(direction) ??
+          const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 

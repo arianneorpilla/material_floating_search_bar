@@ -1,3 +1,8 @@
+## 0.3.7
+
+* **Fixed** #72
+* **Improved** Hide elevation when search bar is hidden
+
 ## 0.3.6
 
 * **Fixed** #62

@@ -14,6 +14,8 @@ class SearchToClear extends StatelessWidget {
   final VoidCallback onTap;
   final Color? color;
   final double size;
+  final String searchButtonSemanticLabel;
+  final String clearButtonSemanticLabel;
 
   /// Creates a Widget that animates between a search and
   /// a clear icon.
@@ -24,6 +26,8 @@ class SearchToClear extends StatelessWidget {
     this.duration = const Duration(milliseconds: 500),
     this.color,
     this.size = 24.0,
+    this.searchButtonSemanticLabel = 'Search',
+    this.clearButtonSemanticLabel = 'Clear',
   }) : super(key: key);
 
   @override
@@ -34,6 +38,9 @@ class SearchToClear extends StatelessWidget {
       builder: (context, value) {
         return CircularButton(
           onPressed: onTap,
+          tooltip: value == 0.0
+              ? searchButtonSemanticLabel
+              : clearButtonSemanticLabel,
           icon: CustomPaint(
             size: Size.square(size),
             painter: _SearchToClearPainter(

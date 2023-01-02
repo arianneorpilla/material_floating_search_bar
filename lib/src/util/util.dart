@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 export 'extensions.dart';
@@ -15,5 +18,13 @@ double interval(double begin, double end, double t,
 }
 
 void postFrame(VoidCallback callback) {
-  WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
+  WidgetsBinding.instance.addPostFrameCallback((_) => callback());
+}
+
+bool get isAvailableSwipeBack {
+  var macLand = false;
+  if (!kIsWeb) {
+    macLand = Platform.isIOS | Platform.isMacOS;
+  }
+  return macLand;
 }

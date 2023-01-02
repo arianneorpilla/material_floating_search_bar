@@ -68,16 +68,8 @@ class FloatingSearchBarAction extends StatelessWidget {
       builder: (context, animation) {
         final isLTR = Directionality.of(context) == TextDirection.ltr;
 
-        return CircularButton(
-          onPressed: () {
-            final bar = FloatingSearchAppBar.of(context);
-            if (bar?.isOpen == true) {
-              bar?.close();
-            } else {
-              Scaffold.of(context).openDrawer();
-            }
-          },
-          icon: RotatedBox(
+        return AnimatedBuilder(
+          child: RotatedBox(
             quarterTurns: (isLTR ? 0 : 2) + (isLeading ? 0 : 2),
             child: AnimatedIcon(
               icon: AnimatedIcons.menu_arrow,
@@ -89,6 +81,21 @@ class FloatingSearchBarAction extends StatelessWidget {
               color: color,
               size: size,
             ),
+          ),
+          animation: animation,
+          builder: (context, icon) => CircularButton(
+            tooltip: animation.isDismissed
+                ? MaterialLocalizations.of(context).openAppDrawerTooltip
+                : MaterialLocalizations.of(context).backButtonTooltip,
+            onPressed: () {
+              final bar = FloatingSearchAppBar.of(context);
+              if (bar?.isOpen == true) {
+                bar?.close();
+              } else {
+                Scaffold.of(context).openDrawer();
+              }
+            },
+            icon: icon!,
           ),
         );
       },
@@ -102,6 +109,8 @@ class FloatingSearchBarAction extends StatelessWidget {
     Color? color,
     bool showIfClosed = true,
     Duration duration = const Duration(milliseconds: 900),
+    String searchButtonSemanticLabel = 'Search',
+    String clearButtonSemanticLabel = 'Clear',
   }) {
     return FloatingSearchBarAction(
       showIfOpened: true,
@@ -127,6 +136,8 @@ class FloatingSearchBarAction extends StatelessWidget {
                       !bar.isOpen || (!bar.hasFocus && bar.isAlwaysOpened);
                 }
               },
+              searchButtonSemanticLabel: searchButtonSemanticLabel,
+              clearButtonSemanticLabel: clearButtonSemanticLabel,
             );
           },
         );
@@ -146,7 +157,7 @@ class FloatingSearchBarAction extends StatelessWidget {
         final canPop = Navigator.canPop(context);
 
         return CircularButton(
-          tooltip: 'Back',
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           size: size,
           icon: Icon(Icons.arrow_back, color: color, size: size),
           onPressed: () {
