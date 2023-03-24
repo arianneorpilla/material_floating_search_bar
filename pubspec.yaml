@@ -5,6 +5,7 @@ repository: https://github.com/bxqm/material_floating_search_bar
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
+  flutter: ">=3.8.0"
 
 dependencies:
   flutter:
