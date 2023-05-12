@@ -2,10 +2,6 @@
 # Lint rules to be used for apps without developer facing API. i.e. command line tools and Flutter applications
 ##
 analyzer:
-  strong-mode:
-    # Will become the default once non-nullable types land
-    # https://github.com/dart-lang/sdk/issues/31410#issuecomment-510683629
-    implicit-casts: true
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning
@@ -41,7 +37,6 @@ linter:
     # This allows API consumers to get warnings via lint rather than a crash a runtime.
     # Might become obsolete with Non-Nullable types
     # http://dart-lang.github.io/linter/lints/always_require_non_null_named_parameters.html
-    - always_require_non_null_named_parameters
 
     # Since dart 2.0 dart is a sound language, specifying types is not required anymore.
     # `var foo = 10;` is enough information for the compiler to make foo a int.
