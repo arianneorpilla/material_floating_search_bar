@@ -642,7 +642,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         final textTheme = theme.textTheme;
 
         final textStyle = hasQuery
-            ? style.queryStyle ?? textTheme.subtitle1
+            ? style.queryStyle ?? textTheme.titleMedium
             : style.hintStyle ??
                 textTheme.subtitle1?.copyWith(color: theme.hintColor);
 
