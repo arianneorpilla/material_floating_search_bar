@@ -644,7 +644,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         final textStyle = hasQuery
             ? style.queryStyle ?? textTheme.titleMedium
             : style.hintStyle ??
-                textTheme.subtitle1?.copyWith(color: theme.hintColor);
+                textTheme.titleMedium?.copyWith(color: theme.hintColor);
 
         input = Text(
           hasQuery ? query : widget.hint ?? '',
